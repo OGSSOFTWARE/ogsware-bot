@@ -23,12 +23,13 @@ client.slashCommands  = new Collection();
 
 // ─── Load Prefix Commands ──────────────────────────────────────────────────
 const prefixDir = path.join(__dirname, 'commands', 'prefix');
-for (const file of fs.readdirSync(prefixDir).filter(f => f.endsWith('.js'))) {
-  const cmd = require(path.join(prefixDir, file));
-  client.prefixCommands.set(cmd.name.toLowerCase(), cmd);
-  (cmd.aliases || []).forEach(a => client.prefixCommands.set(a.toLowerCase(), cmd));
+if (fs.existsSync(prefixDir)) {
+  for (const file of fs.readdirSync(prefixDir).filter(f => f.endsWith('.js'))) {
+    const cmd = require(path.join(prefixDir, file));
+    client.prefixCommands.set(cmd.name.toLowerCase(), cmd);
+    (cmd.aliases || []).forEach(a => client.prefixCommands.set(a.toLowerCase(), cmd));
+  }
 }
-
 // ─── Load Slash Commands ───────────────────────────────────────────────────
 const slashDir = path.join(__dirname, 'commands', 'slash');
 for (const file of fs.readdirSync(slashDir).filter(f => f.endsWith('.js') && !f.startsWith('_'))) {
